@@ -1,0 +1,32 @@
+---
+apiVersion: v1 # String
+kind: Pod  # String
+metadata: # Dictionary
+  namespace: kings
+  name: python-pod # Name
+  labels: # Dictionary 
+    app: python       
+spec:
+  containers: # List
+    - name: python
+      image: vijayasurya/python:v2.1
+      ports:  # List
+        - containerPort: 9000
+      env:
+        - name: DBHOST
+          value: "mysql-service"
+        - name: DBPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: kings-secret
+              key: ombhimphat
+        - name: DBUSER
+          value: "root"
+        - name: DBPORT
+          value: "3306"
+
+
+
+
+
+

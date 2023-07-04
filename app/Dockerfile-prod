@@ -1,0 +1,7 @@
+FROM python:latest
+WORKDIR /data
+COPY .   .
+RUN pip install --no-cache-dir -r requirements.txt
+EXPOSE  9001
+ENTRYPOINT ["python"]
+CMD ["app.py"]

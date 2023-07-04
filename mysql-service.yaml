@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-service
+  namespace: kings
+spec:
+  type: ClusterIP #ClusterIP  #LoadBalancer #ExternalName #NodePort
+  selector:
+    db: mysql
+  ports: 
+    - name: db-port
+      port: 3306 # Service Port
+      targetPort: 3306 # Container Port
+      

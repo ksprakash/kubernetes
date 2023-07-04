@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dbcreation-script
+  namespace: kings
+data: 
+  db.sql: |-
+    DROP DATABASE IF EXISTS somedbname;
+    CREATE DATABASE somedbname; 

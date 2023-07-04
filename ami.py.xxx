@@ -1,0 +1,57 @@
+import boto3
+from datetime import datetime
+
+def date_format(dt):
+    return datetime.strptime(dt, '%Y-%m-%dT%H:%M:%S.%fZ')
+    
+def get_list_of_deregistered_amis(region):
+    session = boto3.Session(profile_name='qa')
+    ec2 = session.client('ec2',region_name=region)
+    instances = ec2.describe_instances()
+    used_ami = []  # Create empty list to save used ami
+    for reservation in instances['Reservations']:
+        for instance in reservation['Instances']:
+            state = instance['State']
+            state = (state['Name'])
+            if state in ('running','stopped') :
+                used_ami.append(instance['ImageId'])
+
+    # Remove duplicate entries from list
+    used_ami = list(set(used_ami))
+
+    # Get all images from account in available state
+    images = ec2.describe_images(Filters=[{'Name': 'state','Values': ['available']},],Owners=['self'],)
+
+    # Traverse dictonary returned and fetch Image ID and append in list
+    all_amis_created_greater_than_90_days = [ image['ImageId'] for image in images["Images"] if image['CreationDate'] > 90]
+    
+
+    # Check if deregister ami is there in used AMI list if not deregister the AMI
+    amis_to_be_deregistered = []
+    for ami in all_amis_created_greater_than_90_days:
+        if ami not in used_ami:
+            amis_to_be_deregistered.append(ami)
+    return amis_to_be_deregistered
+
+def deregister(region):
+  total_amis_deleted = 0
+  max_ami_age_to_prevent_deletion = 90
+  ec2 = boto3.resource('ec2', region_name=region)
+  amis = get_list_of_deregistered_amis(region)
+  for ami in amis:
+      image = ec2.Image(ami)
+      now = datetime.now()
+      img_creation_datetime = date_format(image.creation_date)
+      days_since_creation = (now - img_creation_datetime).days
+      if days_since_creation > max_ami_age_to_prevent_deletion:
+        #image.deregister()
+        total_amis_deleted += 1
+  print(f"Deleted {total_amis_deleted} AMIs within {region}")
+  
+
+
+print(get_list_of_deregistered_amis('us-east-1'))
+
+    
+
+

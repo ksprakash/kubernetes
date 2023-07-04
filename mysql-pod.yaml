@@ -1,0 +1,36 @@
+apiVersion: v1 # String
+kind: Pod  # String
+metadata: # Dictionary
+  namespace: kings
+  name: mysql-pod # Name
+  labels: # Dictionary 
+    db: mysql      
+spec:
+  containers: # List
+    - name: mysqldb
+      image: mysql:5.6
+      ports:  # List
+        - containerPort: 3306
+      env:
+      - name: MYSQL_ROOT_PASSWORD
+        valueFrom:
+            secretKeyRef:
+              name: kings-secret
+              key: ombhimphat
+      resources:
+        limits:
+          memory: "512Mi"
+      volumeMounts:
+            - name: persistent-storage
+              mountPath: /var/lib/mysql  
+            - name: dbcreation-script
+              mountPath: /docker-entrypoint-initdb.d #https://hub.docker.com/_/mysql Refer Initializing a fresh instance  
+  volumes: 
+      - name: persistent-storage
+        persistentVolumeClaim:
+          claimName: ebs-mysql-pv-claim
+      - name: dbcreation-script
+        configMap:
+          name: dbcreation-script
+      
+      

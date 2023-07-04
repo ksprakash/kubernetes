@@ -1,0 +1,22 @@
+apiVersion: apps/v1 # String
+kind: Deployment  # String
+metadata: # Dictionary
+  namespace: kings
+  name: python-deployment-1 # Name
+  labels: # Dictionary 
+    app: python1
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: python1
+  template:  
+    metadata:
+      labels: 
+        app: python1
+    spec:
+        containers: # List
+          - name: python
+            image: vijayasurya/python:v2.2
+            ports:  # List
+              - containerPort: 9001

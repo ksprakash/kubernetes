@@ -1,0 +1,15 @@
+---
+resources:
+- namespace.yaml
+- configmap.yaml
+- secret.yaml
+- storageclass.yaml
+- persistantvolumeclaim.yaml
+- mysql-pod.yaml
+- mysql-service.yaml
+- python-deployment.yaml
+- python-service.yaml
+- python-deployment-1.yaml
+- python-service-1.yaml
+- lb-rbac.yaml
+- ingress.yaml
