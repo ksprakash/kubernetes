@@ -30,7 +30,8 @@
           "ec2:DescribeVpcs",
           "ec2:ModifyInstanceAttribute",
           "ec2:ModifyNetworkInterfaceAttribute",
-          "ec2:RevokeSecurityGroupIngress"
+          "ec2:RevokeSecurityGroupIngress",
+          "ec2:DescribeAvailabilityZones"
         ],
         "Resource": "*"
       },

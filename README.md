@@ -17,7 +17,6 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller --set
 # If not using IAM Roles for service account
 helm install aws-load-balancer-controller eks/aws-load-balancer-controller --set clusterName= -n kube-system
 
-
+Public Subnets has some tags
 kubernetes.io/role/elb	1
-
 kubernetes.io/cluster/sg-sai-cluster	shared
